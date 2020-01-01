@@ -105,7 +105,6 @@ hs_err_pid*
 
 # Documentation
 documentation/javadoc
-documentation/uml
 
 # Maven
 target/
