@@ -81,15 +81,6 @@ public class Board implements Serializable {
      * @return A GameEvent representing the current state of the board.
      */
     public GameEvent boardState() {
-//      // Check the row and column of the last move
-//      if (((grid[lastX][0]) == grid[lastX][1] && grid[lastX][0] == grid[lastX][2])
-//              || (grid[0][lastY] == grid[1][lastY] && grid[0][lastY] == grid[2][lastY]))
-//          return new GameEvent(this, GameEvent.Status.WINNER, turn);
-//
-//      // Check a diagonal (if a move was just played along one)
-//      if (((lastX == lastY) && (grid[0][0] == grid[1][1] && grid[0][0] == grid[2][2])) || 
-//              (lastX == SIZE - 1 - lastY) && (grid[0][2] == grid[1][1] && grid[0][2] == grid[2][0]))
-//          return new GameEvent(this, GameEvent.Status.WINNER, turn);
         boolean flag = true;
         if (moveCount > 4) {
             // Check the row of the last move
@@ -160,12 +151,10 @@ public class Board implements Serializable {
      * @param boardListener The listener to add
      */
     public void addListener(BoardListener boardListener) {
-        if (boardListeners == null) {
+        if (boardListeners == null)
             boardListeners = new ArrayList<>();
-        }
-        if (!boardListeners.contains(boardListener)) {
+        if (!boardListeners.contains(boardListener))
             boardListeners.add(boardListener);
-        }
     }
 
     /**
