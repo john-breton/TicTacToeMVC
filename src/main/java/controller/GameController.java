@@ -15,7 +15,7 @@ import model.Board;
  */
 public class GameController {
 
-    private Board board;
+    private final Board board;
 
     /**
      * Construct a new GameController.

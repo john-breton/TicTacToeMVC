@@ -259,7 +259,7 @@ BoardListener</string>
    <object class="com.horstmann.violet.InterfaceNode" id="InterfaceNode1">
     <void property="methods">
      <void property="text">
-      <string>+actionPerfomed(e:ActionEvent)</string>
+      <string>+actionPerformed(e:ActionEvent)</string>
      </void>
     </void>
     <void property="name">

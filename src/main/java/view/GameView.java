@@ -67,13 +67,14 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
     public static final int TEXT_SIZE = (int) (SIDE_LENGTH / 45);
 
     private Board board;
-    private JButton btnReset, btnSave, btnLoad;
-    private JMenuBar menuBar;
+    private final JButton btnReset;
+    private final JButton btnSave;
     private JButton[][] buttons;
-    private JPanel turnPanel, gridPanel;
+    private JPanel turnPanel;
+    private final JPanel gridPanel;
     private JTextArea turnDisplay;
     private GameController gameController;
-    private JFileChooser fc;
+    private final JFileChooser fc;
 
     /**
      * Construct a new GameView.
@@ -87,6 +88,9 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
         this.gameController = new GameController(board);
         gridPanel = new JPanel(new GridLayout(Board.SIZE, Board.SIZE));
 
+        JMenuBar menuBar;
+        JButton btnLoad;
+
         this.setJMenuBar(menuBar = new JMenuBar());
         menuBar.setLayout(new GridLayout(1, 3));
 
@@ -94,9 +98,9 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
         menuBar.add(btnSave = createMenuBarButton("Save"));
         menuBar.add(btnLoad = createMenuBarButton("Load"));
 
-        intializeTurnText();
+        initializeTurnText();
         initializeButtons();
-        intializeFrame(this);
+        initializeFrame(this);
 
         btnReset.addActionListener(this);
         btnSave.addActionListener(this);
@@ -121,7 +125,7 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
     /**
      * Initialize a JTextArea that displays information about the current turn.
      */
-    private void intializeTurnText() {
+    private void initializeTurnText() {
         turnPanel = new JPanel();
         turnPanel.add(turnDisplay = new JTextArea("It is X's turn."));
         turnDisplay.setEditable(false);
@@ -136,7 +140,7 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
      * @param parent Used to properly display the exit dialog pop-up relative to the
      *               frame (the parent).
      */
-    private void intializeFrame(Component parent) {
+    private void initializeFrame(Component parent) {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
@@ -197,8 +201,9 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
                 } else if (board.getCharacter(x, y) == 'o') {
                     buttons[x][y].setText("O");
                     buttons[x][y].setEnabled(false);
-                } else
+                } else {
                     buttons[x][y].setText("");
+                }
             }
         }
     }
@@ -239,7 +244,7 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
     /**
      * Save the current game.
      */
-    private final boolean save(String path) {
+    private boolean save(String path) {
         try {
             // Ensure that a file of that name does not already exist.
             if (new File(path).isFile()) {
@@ -262,7 +267,7 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
     /**
      * Load a previously saved game.
      */
-    private final boolean load(String path) {
+    private boolean load(String path) {
         try
         {    
             FileInputStream file = new FileInputStream(path); 
@@ -275,10 +280,13 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
             
             updateView();
             enableButtons(true);
-            for (int x = 0; x < Board.SIZE; x++) 
-                for (int y = 0; y < Board.SIZE; y++) 
-                    if (board.getCharacter(x, y) != ' ') 
+            for (int x = 0; x < Board.SIZE; x++) {
+                for (int y = 0; y < Board.SIZE; y++) {
+                    if (board.getCharacter(x, y) != ' ') {
                         buttons[x][y].setEnabled(false);
+                    }
+                }
+            }
             
             btnSave.setEnabled(true);
             this.board.addListener(this);
@@ -288,11 +296,9 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
             return true;
         } 
           
-        catch(IOException ex)  { 
+        catch(IOException | ClassNotFoundException ex)  {
             return false;
-        } catch (ClassNotFoundException e) {
-            return false;
-        } 
+        }
     }
 
     /**
@@ -334,7 +340,7 @@ public class GameView extends JFrame implements ActionListener, BoardListener, R
         } else {
             int returnVal = fc.showOpenDialog(this);
             while(returnVal == JFileChooser.APPROVE_OPTION && !load(fc.getSelectedFile().getAbsolutePath())) {
-                JOptionPane.showMessageDialog(this, "The file was moved while loading occured, please try again.", "Error loading file", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "The file was moved while loading occurred, please try again.", "Error loading file", JOptionPane.INFORMATION_MESSAGE);
                 returnVal = fc.showSaveDialog(this);
             }
         }

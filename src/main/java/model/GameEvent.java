@@ -16,8 +16,8 @@ public class GameEvent extends EventObject {
         WINNER, DRAW, NO_WINNER
     }
     
-    private Status status;
-    private boolean turn;
+    private final Status status;
+    private final boolean turn;
     
     /**
      * Construct a new GameEvent.
@@ -28,10 +28,11 @@ public class GameEvent extends EventObject {
      */
     public GameEvent(Object source, Status status, boolean turn) {
         super(source);
-        if (status != null) 
+        if (status != null) {
             this.status = status;
-        else
+        } else {
             this.status = Status.NO_WINNER;
+        }
         this.turn = turn;
     }
     
